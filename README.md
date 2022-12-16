@@ -1,3 +1,3 @@
-# Core Mod (External) Template
+# Core Mod (External) Core-Redstone
 
-This is a template for creating official MiniMods-supported external core mods.
+This is a MiniMods-supported external core mods Core-Redstone.
