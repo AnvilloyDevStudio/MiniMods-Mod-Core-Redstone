@@ -2,10 +2,10 @@ apply plugin: 'java'
 apply plugin: 'java-library'
 apply plugin: 'application'
 
-project.version = '<VERSION>'
+project.version = '0.1.0'
 
 sourceCompatibility = 8
-mainClassName = "io.github.anvilloystudio.minimods.mod.core.<ENTRYPOINT>"
+mainClassName = "io.github.anvilloystudio.minimods.mod.core.redstone.Main"
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 repositories {
@@ -33,7 +33,7 @@ buildscript {
 }
 
 jar {
-    archivesBaseName = '<NAME>'
+    archivesBaseName = 'core-redstone'
     archiveClassifier.set('')
 
     manifest {
