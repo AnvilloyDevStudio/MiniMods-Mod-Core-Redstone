@@ -2,14 +2,20 @@ package io.github.anvilloystudio.minimods.mod.core.redstone.circuit;
 
 import com.google.common.collect.Sets;
 import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneNodeTile;
+import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneNodeTile.RedstoneReceiver;
+import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneNodeTile.RedstoneTransmitter;
 import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneTile;
 import minicraft.core.World;
+import minicraft.entity.Direction;
 import minicraft.level.Level;
 import minicraft.level.tile.Tile;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.function.BiConsumer;
+import java.util.function.IntUnaryOperator;
 
+@SuppressWarnings("deprecated")
 public class RedstoneNode {
 	private static final HashSet<RedstoneNode> nodeList = new HashSet<>();
 	// The key is the position is correspondingly related to the level position of the node.
@@ -72,7 +78,25 @@ public class RedstoneNode {
 			}
 		}
 
-		// TODO
+		for (HashSet<RedstoneNode> circuit : circuits) {
+			HashMap<Integer, Integer> powers = new HashMap<>();
+			final IntUnaryOperator powerQueryResponder = powers::get;
+			final BiConsumer<Integer, Integer> powerSetter = powers::put;
+			for (RedstoneNode node : circuit) {
+				if (node.tile instanceof RedstoneTransmitter) {
+					Level level = World.levels[node.lvlIdx];
+					for (Direction dir : ((RedstoneTransmitter<?>) node.tile).getTransmittableDirections(level, node.x, node.y)) {
+						int targetX = node.x + dir.getX();
+						int targetY = node.y + dir.getY();
+						Tile target = level.getTile(targetX, targetY);
+						if (target instanceof RedstoneReceiver) {
+							int power = ((RedstoneTransmitter<?>) node.tile).getTransmittingPower(level, node.x, node.y, dir, powerQueryResponder, powerSetter);
+							((RedstoneReceiver<?>) target).receivePower(level, targetX, targetY, Direction.getDirection(-dir.getX(), -dir.getY()), power, powerQueryResponder, powerSetter);
+						}
+					}
+				}
+			}
+		}
 	}
 
 	/**

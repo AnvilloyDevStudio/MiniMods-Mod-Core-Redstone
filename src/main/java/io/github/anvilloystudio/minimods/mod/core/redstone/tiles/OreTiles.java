@@ -36,7 +36,7 @@ public class OreTiles {
 
 	private static void redstoneGenerationUnderground(byte[] map, byte[] data, int layer, int w, int h, Random random) {
 		int r = 2;
-		for (int i = 0; i < w * h / 100 * Math.abs(layer); i++) { // How many times attempting to generate.
+		for (int i = 0; i < w * h / 40 * Math.abs(layer); i++) { // How many times attempting to generate.
 			int x = random.nextInt(w); // Random select a location.
 			int y = random.nextInt(h);
 			for (int j = 0; j < 20; j++) { // How large for each ore vein.

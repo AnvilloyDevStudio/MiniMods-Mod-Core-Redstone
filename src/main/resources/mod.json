@@ -1,8 +1,8 @@
 {
-  "id": "<MODID>",
-  "name": "Core",
-  "description": "This mod is the core mod (with MiniMods), which is a mod too.\nThis core mod is a mod that is developed with the Mod Loader.\nThis is used for debugging.",
-  "version": "<VERSION>",
+  "id": "core-redstone",
+  "name": "Core-Redstone",
+  "description": "This mod is a core mod which provided the ability of redstone in Minicraft+ with MiniMods. Supported officially by MiniMods.",
+  "version": "0.1.0",
   "gameVersion": "2.0.7",
   "loaderVersion": "0.4.0",
   "author": "MiniMods",
