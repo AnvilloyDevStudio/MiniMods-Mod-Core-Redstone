@@ -4,7 +4,8 @@
   "priority": 2147480099,
   "minVersion": "0.8.5",
   "mixins": [
-    "TileItemMixin"
+    "TileItemMixin",
+    "UpdaterMixin"
   ],
   "injectors": {
     "defaultRequire": 1

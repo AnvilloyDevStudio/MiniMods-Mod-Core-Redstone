@@ -3,7 +3,6 @@ package io.github.anvilloystudio.minimods.mod.core.redstone.tiles;
 import io.github.anvilloystudio.minimods.api.GraphicComp;
 import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneNodeTile.RedstoneReceiver;
 import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneNodeTile.RedstoneTransmitter;
-import minicraft.core.World;
 import minicraft.core.io.Sound;
 import minicraft.entity.Direction;
 import minicraft.entity.mob.Mob;
@@ -20,8 +19,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.EnumSet;
-import java.util.function.BiConsumer;
-import java.util.function.IntUnaryOperator;
 
 @SuppressWarnings("deprecated")
 public class RedstoneTile extends Tile implements RedstoneTransmitter<RedstoneTile>, RedstoneReceiver<RedstoneTile> {
@@ -46,37 +43,47 @@ public class RedstoneTile extends Tile implements RedstoneTransmitter<RedstoneTi
 
 	@Override
 	public @NotNull EnumSet<Direction> getTransmittableDirections(Level level, int x, int y) {
-		return EnumSet.of(Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT);
+		return EnumSet.of(Direction.DOWN, Direction.UP, Direction.LEFT, Direction.RIGHT);
 	}
 
 	@Override
-	public int getTransmittingPower(Level level, int x, int y, Direction dir, IntUnaryOperator powerQueryResponder, BiConsumer<Integer, Integer> powerSetter) {
-		return level.getData(x, y) - 1;
+	public int getTransmittingPower(Level level, int x, int y, Direction dir) {
+		return Math.max(level.getData(x, y) - 1, 0);
+	}
+
+	@Override
+	public boolean getTransmittingStrength(Level level, int x, int y, Direction dir) {
+		return false;
 	}
 
 	@Override
 	public @NotNull EnumSet<Direction> getReceivableDirections(Level level, int x, int y) {
-		return EnumSet.of(Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT);
+		return EnumSet.of(Direction.DOWN, Direction.UP, Direction.LEFT, Direction.RIGHT);
 	}
 
 	@Override
-	public boolean receivePower(Level level, int x, int y, Direction dir, int power, IntUnaryOperator powerQueryResponder, BiConsumer<Integer, Integer> powerSetter) {
-		if (power > level.getData(x, y))
-			powerSetter.accept(x + y * level.w + World.lvlIdx(level.depth) * level.w * level.h, power & 0xF);
-		return true;
+	public boolean receivePower(Level level, int x, int y, Direction dir, int power, boolean strong, RedstoneNodeTile source) {
+		if (power > level.getData(x, y)) {
+			level.setData(x, y, power & 0xF);
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override
 	public boolean interact(Level level, int xt, int yt, Player player, Item item, Direction attackDir) {
 		Sound.monsterHurt.play();
-		return hurt(level, xt, yt, player, 0, attackDir);
+		level.setTile(xt, yt, Tiles.get(30)); // Placing stone floor. The tile it can only be placed on.
+		level.dropItem(xt * 16 + 8, yt * 16 + 8, Items.get("Redstone"));
+		return true;
 	}
 
 	@Override
 	public boolean hurt(Level level, int x, int y, Mob source, int dmg, Direction attackDir) {
-		level.setTile(x, y, Tiles.get(30)); // Placing stone floor. The tile it can only be placed on.
-		level.dropItem(x * 16 + 8, y * 16 + 8, Items.get("Redstone"));
-		return true;
+		if (source instanceof Player)
+			return interact(level, x, y, (Player) source, null, attackDir);
+		return false;
 	}
 
 	@Override
@@ -85,10 +92,15 @@ public class RedstoneTile extends Tile implements RedstoneTransmitter<RedstoneTi
 
 		boolean up, down, left, right, straight;
 		up = down = left = right = straight = false;
-		if (level.getTile(x, y - 1) instanceof RedstoneNodeTile) up = true;
-		if (level.getTile(x, y + 1) instanceof RedstoneNodeTile) down = true;
-		if (level.getTile(x - 1, y) instanceof RedstoneNodeTile) left = true;
-		if (level.getTile(x + 1, y) instanceof RedstoneNodeTile) right = true;
+		Tile tile;
+		if ((tile = level.getTile(x, y - 1)) instanceof RedstoneNodeTile &&
+			((RedstoneNodeTile) tile).isConnectableToDust(level, x, y - 1, Direction.DOWN)) up = true;
+		if ((tile = level.getTile(x, y + 1)) instanceof RedstoneNodeTile &&
+			((RedstoneNodeTile) tile).isConnectableToDust(level, x, y + 1, Direction.UP)) down = true;
+		if ((tile = level.getTile(x - 1, y)) instanceof RedstoneNodeTile &&
+			((RedstoneNodeTile) tile).isConnectableToDust(level, x - 1, y, Direction.RIGHT)) left = true;
+		if ((tile = level.getTile(x + 1, y)) instanceof RedstoneNodeTile &&
+			((RedstoneNodeTile) tile).isConnectableToDust(level, x + 1, y, Direction.LEFT)) right = true;
 
 		// Rendering full directional look if not connected.
 		if (!(up || down || left || right)) up = down = left = right = true;
@@ -98,7 +110,7 @@ public class RedstoneTile extends Tile implements RedstoneTransmitter<RedstoneTi
 		if ((left || right) && !(up || down)) // If only left or right, making it straight horizontal.
 			left = right = straight = true;
 
-		int color = 0xFF - (15 - (level.getData(x, y) & 0xF)) * 10 << 16;
+		int color = 0xFF - (15 - (level.getData(x, y) & 0xF)) * 12 << 16;
 
 		// At least 2 directions are true.
 		if (up) {
@@ -117,5 +129,10 @@ public class RedstoneTile extends Tile implements RedstoneTransmitter<RedstoneTi
 
 		if (!straight)
 			spriteDot.render(screen, x << 4, y << 4, 0, color);
+	}
+
+	@Override
+	public boolean isConnectableToDust(Level level, int x, int y, Direction dir) {
+		return true;
 	}
 }

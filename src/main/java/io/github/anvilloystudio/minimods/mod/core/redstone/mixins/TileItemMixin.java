@@ -1,6 +1,7 @@
 package io.github.anvilloystudio.minimods.mod.core.redstone.mixins;
 
 import io.github.anvilloystudio.minimods.api.GraphicComp;
+import io.github.anvilloystudio.minimods.mod.core.redstone.items.RepeaterItem;
 import minicraft.gfx.Sprite;
 import minicraft.item.Item;
 import minicraft.item.TileItem;
@@ -25,8 +26,29 @@ public class TileItemMixin {
 	private static void injectMoreItems(CallbackInfoReturnable<ArrayList<Item>> ci, ArrayList<Item> items) {
 		try {
 			items.add(invokeInit("Redstone", GraphicComp.getSpriteFromSheet(1, 1,
-				GraphicComp.getSpriteSheetFromInputStream(TileItemMixin.class.getResourceAsStream("/assets/textures/items/redstone.png"))),
+					GraphicComp.getSpriteSheetFromInputStream(TileItemMixin.class.getResourceAsStream("/assets/textures/items/redstone.png"))),
 				"Redstone", "Stone Bricks")); // Redstone Dust
+			items.add(invokeInit("Redstone Switch", GraphicComp.getSpriteFromSheet(1, 1,
+					GraphicComp.getSpriteSheetFromInputStream(TileItemMixin.class.getResourceAsStream("/assets/textures/items/redstone_switch.png"))),
+				"Redstone Switch", "Stone Bricks")); // Redstone Switch
+			items.add(invokeInit("Button", GraphicComp.getSpriteFromSheet(1, 1,
+					GraphicComp.getSpriteSheetFromInputStream(TileItemMixin.class.getResourceAsStream("/assets/textures/items/button.png"))),
+				"Button", "Stone Bricks")); // Button
+			items.add(invokeInit("Permanent Redstone Transmitter", GraphicComp.getSpriteFromSheet(1, 1,
+					GraphicComp.getSpriteSheetFromInputStream(TileItemMixin.class.getResourceAsStream("/assets/textures/items/permanent_redstone_transmitter.png"))),
+				"Permanent Redstone Transmitter", "Stone Bricks")); // Permanent Redstone Transmitter
+			items.add(invokeInit("Daylight Detector", GraphicComp.getSpriteFromSheet(1, 1,
+					GraphicComp.getSpriteSheetFromInputStream(TileItemMixin.class.getResourceAsStream("/assets/textures/items/daylight_detector.png"))),
+				"Daylight Detector", "Stone Bricks")); // Daylight Detector
+			items.add(invokeInit("Pressure Plate", GraphicComp.getSpriteFromSheet(1, 1,
+					GraphicComp.getSpriteSheetFromInputStream(TileItemMixin.class.getResourceAsStream("/assets/textures/items/pressure_plate.png"))),
+				"Pressure Plate", "Stone Bricks")); // Pressure Plate
+			items.add(invokeInit("Redstone Torch", GraphicComp.getSpriteFromSheet(1, 1,
+					GraphicComp.getSpriteSheetFromInputStream(TileItemMixin.class.getResourceAsStream("/assets/textures/items/redstone_torch.png"))),
+				"Redstone Torch", "Stone Bricks")); // Redstone Torch
+			items.add(new RepeaterItem("Repeater", GraphicComp.getSpriteFromSheet(1, 1,
+					GraphicComp.getSpriteSheetFromInputStream(TileItemMixin.class.getResourceAsStream("/assets/textures/items/repeater.png"))),
+				"Repeater", "Stone Bricks")); // Repeater
 		} catch (IOException e) {
 			throw new RuntimeException("Unable to initialize item(s).", e);
 		}

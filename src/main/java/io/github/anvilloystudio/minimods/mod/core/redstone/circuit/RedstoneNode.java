@@ -12,8 +12,7 @@ import minicraft.level.tile.Tile;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.function.BiConsumer;
-import java.util.function.IntUnaryOperator;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("deprecated")
 public class RedstoneNode {
@@ -51,8 +50,9 @@ public class RedstoneNode {
 
 	/**
 	 * This is used in {@link minicraft.core.Updater#tick() Updater.tick()} for refreshing the all existing redstone circuits.
+	 * This should be called right after {@link #refreshNodes()}.
 	 */
-	public static void refreshCircuit() {
+	public static void refreshCircuits() {
 		HashSet<RedstoneNode> processed = new HashSet<>();
 		HashSet<HashSet<RedstoneNode>> circuits = new HashSet<>();
 		for (RedstoneNode node : nodeList) {
@@ -60,7 +60,7 @@ public class RedstoneNode {
 			if (nearNodes.length > 0) { // Connecting to other existed circuit(s).
 				HashSet<HashSet<RedstoneNode>> nearCircuits = new HashSet<>();
 				for (RedstoneNode nearNode : nearNodes) { // The set should not be empty.
-					nearCircuits.add(circuits.stream().filter(s -> s.contains(nearNode)).findAny().orElse(null));
+					nearCircuits.addAll(circuits.stream().filter(s -> s.contains(nearNode)).collect(Collectors.toSet()));
 				}
 
 				if (nearCircuits.size() == 1) {
@@ -79,22 +79,34 @@ public class RedstoneNode {
 		}
 
 		for (HashSet<RedstoneNode> circuit : circuits) {
-			HashMap<Integer, Integer> powers = new HashMap<>();
-			final IntUnaryOperator powerQueryResponder = powers::get;
-			final BiConsumer<Integer, Integer> powerSetter = powers::put;
-			for (RedstoneNode node : circuit) {
-				if (node.tile instanceof RedstoneTransmitter) {
-					Level level = World.levels[node.lvlIdx];
-					for (Direction dir : ((RedstoneTransmitter<?>) node.tile).getTransmittableDirections(level, node.x, node.y)) {
-						int targetX = node.x + dir.getX();
-						int targetY = node.y + dir.getY();
-						Tile target = level.getTile(targetX, targetY);
-						if (target instanceof RedstoneReceiver) {
-							int power = ((RedstoneTransmitter<?>) node.tile).getTransmittingPower(level, node.x, node.y, dir, powerQueryResponder, powerSetter);
-							((RedstoneReceiver<?>) target).receivePower(level, targetX, targetY, Direction.getDirection(-dir.getX(), -dir.getY()), power, powerQueryResponder, powerSetter);
+			while (true) {
+				boolean changed = false;
+				for (RedstoneNode node : circuit) {
+					if (node.tile instanceof RedstoneTransmitter) {
+						Level level = World.levels[node.lvlIdx];
+						for (Direction dir : ((RedstoneTransmitter<?>) node.tile).getTransmittableDirections(level, node.x, node.y)) {
+							int targetX = node.x + dir.getX();
+							int targetY = node.y + dir.getY();
+							Tile target = level.getTile(targetX, targetY);
+							if (target instanceof RedstoneReceiver) {
+								Direction targetDir = null;
+								if (dir == Direction.DOWN) targetDir = Direction.UP;
+								else if (dir == Direction.UP) targetDir = Direction.DOWN;
+								else if (dir == Direction.LEFT) targetDir = Direction.RIGHT;
+								else if (dir == Direction.RIGHT) targetDir = Direction.LEFT;
+								if (((RedstoneReceiver<?>) target).getReceivableDirections(level, targetX, targetY).contains(targetDir)) {
+									int power = ((RedstoneTransmitter<?>) node.tile).getTransmittingPower(level, node.x, node.y, dir);
+									boolean strong = ((RedstoneTransmitter<?>) node.tile).getTransmittingStrength(level, node.x, node.y, dir);
+									if (((RedstoneReceiver<?>) target).receivePower(level, targetX, targetY, Direction.getDirection(-dir.getX(), -dir.getY()), power, strong, node.tile))
+										changed = true;
+								}
+							}
 						}
 					}
 				}
+
+				if (!changed)
+					break;
 			}
 		}
 	}
@@ -127,5 +139,10 @@ public class RedstoneNode {
 		this.y = y;
 		this.lvlIdx = lvlIdx;
 		this.tile = tile;
+	}
+
+	@Override
+	public String toString() {
+		return super.toString() + String.format("[%s;%s;%s;%s]" ,lvlIdx, x, y, tile);
 	}
 }
