@@ -13,5 +13,6 @@ public class Tiles {
 		TilesMixin.invokeAdd(67, new RedstoneTorchTile());
 		TilesMixin.invokeAdd(68, new RepeaterTile());
 		TilesMixin.invokeAdd(69, new ComparatorTile());
+		TilesMixin.invokeAdd(70, new RedstoneLampTile());
 	}
 }

@@ -53,6 +53,9 @@ public class TileItemMixin {
 			items.add(new ComparatorItem("Comparator", GraphicComp.getSpriteFromSheet(1, 1,
 				GraphicComp.getSpriteSheetFromInputStream(TileItemMixin.class.getResourceAsStream("/assets/textures/items/comparator.png"))),
 				"Comparator", "Stone Bricks")); // Comparator
+			items.add(invokeInit("Redstone Lamp", GraphicComp.getSpriteFromSheet(1, 1,
+					GraphicComp.getSpriteSheetFromInputStream(TileItemMixin.class.getResourceAsStream("/assets/textures/items/redstone_lamp.png"))),
+				"Redstone Lamp", "Stone Bricks")); // Redstone Lamp
 		} catch (IOException e) {
 			throw new RuntimeException("Unable to initialize item(s).", e);
 		}
