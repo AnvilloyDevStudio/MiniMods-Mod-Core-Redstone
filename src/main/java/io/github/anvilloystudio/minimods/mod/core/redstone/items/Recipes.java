@@ -1,4 +1,4 @@
-package io.github.anvilloystudio.minimods.mod.core.redstone;
+package io.github.anvilloystudio.minimods.mod.core.redstone.items;
 
 import minicraft.item.Recipe;
 
@@ -13,5 +13,6 @@ public class Recipes {
 		minicraft.item.Recipes.workbenchRecipes.add(new Recipe("Repeater_1", "Redstone_2", "Redstone Torch_2", "Rock_4"));
 		minicraft.item.Recipes.workbenchRecipes.add(new Recipe("Comparator_1", "Redstone_3", "Redstone Torch_3", "Rock_4"));
 		minicraft.item.Recipes.workbenchRecipes.add(new Recipe("Redstone Lamp_1", "Redstone_2", "Redstone Torch_1", "Plank_2", "Glass_2"));
+		minicraft.item.Recipes.workbenchRecipes.add(new Recipe("Redstone Wrench_1", "Redstone_3", "Plank_2", "Iron Ingot_1"));
 	}
 }

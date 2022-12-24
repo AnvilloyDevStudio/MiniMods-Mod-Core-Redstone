@@ -48,7 +48,7 @@ public class RedstoneTile extends Tile implements RedstoneTransmitter<RedstoneTi
 
 	@Override
 	public int getTransmittingPower(Level level, int x, int y, Direction dir) {
-		return Math.max(level.getData(x, y) - 1, 0);
+		return level.getData(x, y) & 0xF;
 	}
 
 	@Override
@@ -63,6 +63,8 @@ public class RedstoneTile extends Tile implements RedstoneTransmitter<RedstoneTi
 
 	@Override
 	public boolean receivePower(Level level, int x, int y, Direction dir, int power, boolean strong, RedstoneNodeTile source) {
+		if (source instanceof RedstoneTile)
+			power--; // Decrementing power in dusts.
 		if (power > level.getData(x, y)) {
 			level.setData(x, y, power & 0xF);
 			return true;

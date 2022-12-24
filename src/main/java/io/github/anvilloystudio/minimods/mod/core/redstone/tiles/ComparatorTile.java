@@ -4,6 +4,7 @@ import io.github.anvilloystudio.minimods.api.GraphicComp;
 import io.github.anvilloystudio.minimods.api.ModProcedure;
 import io.github.anvilloystudio.minimods.api.Vector2;
 import io.github.anvilloystudio.minimods.api.interfaces.Tickable;
+import io.github.anvilloystudio.minimods.mod.core.redstone.items.RedstoneWrenchItem;
 import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneNodeTile.RedstoneReceiver;
 import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneNodeTile.RedstoneTransmitter;
 import minicraft.core.World;
@@ -224,6 +225,11 @@ public class ComparatorTile extends Tile implements RedstoneTransmitter<Comparat
 					return true;
 				}
 			}
+		} else if (item instanceof RedstoneWrenchItem) { // Rotating the tile.
+			int data = level.getData(xt, yt);
+			int dir = (data >> 2) & 3;
+			level.setData(xt, yt, (((dir + 1) & 3) << 2) + (data & 0b11));
+			return true;
 		}
 
 		Sound.monsterHurt.play();
