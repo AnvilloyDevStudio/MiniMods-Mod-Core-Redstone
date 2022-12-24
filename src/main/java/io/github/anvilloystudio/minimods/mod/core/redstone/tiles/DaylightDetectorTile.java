@@ -46,11 +46,24 @@ public class DaylightDetectorTile extends Tile implements RedstoneTransmitter<Da
 	}
 
 	@Override
-	public int getTransmittingPower(Level level, int x, int y, Direction dir) {
-		if (level.getData(x, y) == 0)
-			return Updater.tickCount < Updater.Time.Evening.tickTime ? 15 : 0;
-		else // Inverted
-			return Updater.tickCount >= Updater.Time.Evening.tickTime ? 15 : 0;
+	public int getTransmittingPower(Level level, int x, int y, Direction dir, RedstoneNodeTile target) {
+		if (target instanceof RepeaterTile)
+			return 15;
+		return level.getData(x, y) == 0 ? getSkyLevel() : 15 - getSkyLevel();
+	}
+
+	/**
+	 * Getting the height level of the sun or the moon whatever it is day or night.
+	 * @return The sky level. (0-15)
+	 */
+	public static int getSkyLevel() {
+		int halfDayLength = Updater.dayLength/2;
+		int halfDayTime = Updater.tickCount % halfDayLength;
+		int levelInterval = halfDayLength/30;
+		if (halfDayTime/levelInterval >= 15)
+			return 30 - halfDayTime/levelInterval;
+		else
+			return halfDayTime/levelInterval;
 	}
 
 	@Override

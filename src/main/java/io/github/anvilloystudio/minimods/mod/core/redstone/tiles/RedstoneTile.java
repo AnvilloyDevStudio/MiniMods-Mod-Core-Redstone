@@ -47,7 +47,7 @@ public class RedstoneTile extends Tile implements RedstoneTransmitter<RedstoneTi
 	}
 
 	@Override
-	public int getTransmittingPower(Level level, int x, int y, Direction dir) {
+	public int getTransmittingPower(Level level, int x, int y, Direction dir, RedstoneNodeTile target) {
 		return level.getData(x, y) & 0xF;
 	}
 

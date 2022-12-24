@@ -68,7 +68,7 @@ public class RedstoneTorchTile extends Tile implements RedstoneTransmitter<Redst
 	}
 
 	@Override
-	public int getTransmittingPower(Level level, int x, int y, Direction dir) {
+	public int getTransmittingPower(Level level, int x, int y, Direction dir, RedstoneNodeTile target) {
 		return level.getData(x, y) == 0 ? 15 : 0;
 	}
 

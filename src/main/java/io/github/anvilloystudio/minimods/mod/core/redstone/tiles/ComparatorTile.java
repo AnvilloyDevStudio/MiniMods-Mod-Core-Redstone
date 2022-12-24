@@ -140,7 +140,7 @@ public class ComparatorTile extends Tile implements RedstoneTransmitter<Comparat
 	}
 
 	@Override
-	public int getTransmittingPower(Level level, int x, int y, Direction dir) {
+	public int getTransmittingPower(Level level, int x, int y, Direction dir, RedstoneNodeTile target) {
 		addExistingTile(level, x, y);
 		int pos = x + y * level.w + World.lvlIdx(level.depth) * level.w * level.h;
 		return transmittingTiles.getOrDefault(pos, 0);

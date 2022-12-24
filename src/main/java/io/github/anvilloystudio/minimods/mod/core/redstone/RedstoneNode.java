@@ -1,4 +1,4 @@
-package io.github.anvilloystudio.minimods.mod.core.redstone.circuit;
+package io.github.anvilloystudio.minimods.mod.core.redstone;
 
 import com.google.common.collect.Sets;
 import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneNodeTile;
@@ -95,7 +95,7 @@ public class RedstoneNode {
 								else if (dir == Direction.LEFT) targetDir = Direction.RIGHT;
 								else if (dir == Direction.RIGHT) targetDir = Direction.LEFT;
 								if (((RedstoneReceiver<?>) target).getReceivableDirections(level, targetX, targetY).contains(targetDir)) {
-									int power = ((RedstoneTransmitter<?>) node.tile).getTransmittingPower(level, node.x, node.y, dir);
+									int power = ((RedstoneTransmitter<?>) node.tile).getTransmittingPower(level, node.x, node.y, dir, (RedstoneNodeTile) target);
 									boolean strong = ((RedstoneTransmitter<?>) node.tile).getTransmittingStrength(level, node.x, node.y, dir);
 									if (((RedstoneReceiver<?>) target).receivePower(level, targetX, targetY, Direction.getDirection(-dir.getX(), -dir.getY()), power, strong, node.tile))
 										changed = true;

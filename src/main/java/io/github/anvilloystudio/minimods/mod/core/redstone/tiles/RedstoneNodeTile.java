@@ -39,13 +39,15 @@ public interface RedstoneNodeTile {
 
 		/**
 		 * Getting the transmitting power to the specified direction on the specified tile.
+		 *
 		 * @param level The level of the tile being on.
 		 * @param x The x-coordinate of the tile.
 		 * @param y The y-coordinate of the tile.
 		 * @param dir The direction to transmit.
+		 * @param target The target to transmit power.
 		 * @return The redstone power. The value should be in between 0 and 15. 0 if the direction is not transmittable.
 		 */
-		int getTransmittingPower(Level level, int x, int y, Direction dir);
+		int getTransmittingPower(Level level, int x, int y, Direction dir, RedstoneNodeTile target);
 
 		/**
 		 * Getting the transmitting power strength to the specified direction on the specified tile.

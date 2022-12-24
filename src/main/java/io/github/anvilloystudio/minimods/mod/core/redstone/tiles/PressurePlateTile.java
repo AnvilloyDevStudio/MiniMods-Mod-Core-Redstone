@@ -69,7 +69,7 @@ public class PressurePlateTile extends Tile implements RedstoneTransmitter<Press
 	}
 
 	@Override
-	public int getTransmittingPower(Level level, int x, int y, Direction dir) {
+	public int getTransmittingPower(Level level, int x, int y, Direction dir, RedstoneNodeTile target) {
 		return level.getData(x, y) == 1 ? 15 : 0;
 	}
 

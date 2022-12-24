@@ -1,6 +1,6 @@
 package io.github.anvilloystudio.minimods.mod.core.redstone.mixins;
 
-import io.github.anvilloystudio.minimods.mod.core.redstone.circuit.RedstoneNode;
+import io.github.anvilloystudio.minimods.mod.core.redstone.RedstoneNode;
 import minicraft.core.Updater;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

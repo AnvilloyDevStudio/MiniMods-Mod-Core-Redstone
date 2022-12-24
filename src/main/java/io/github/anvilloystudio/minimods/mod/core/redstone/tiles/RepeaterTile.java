@@ -139,7 +139,7 @@ public class RepeaterTile extends Tile implements RedstoneTransmitter<RepeaterTi
 	// Data bits (leftmost to rightmost): Direction {2}, Delay {2}, Locked {1}, Powered {1}
 
 	@Override
-	public int getTransmittingPower(Level level, int x, int y, Direction dir) {
+	public int getTransmittingPower(Level level, int x, int y, Direction dir, RedstoneNodeTile target) {
 		addExistingTile(level, x, y);
 		return (level.getData(x, y) & 1) == 1 ? 15 : 0;
 	}
@@ -179,7 +179,9 @@ public class RepeaterTile extends Tile implements RedstoneTransmitter<RepeaterTi
 						}
 					}
 				}
-			} else if (strong) { // Other directions (besides) of receiving.
+			} else if (strong &&
+				(source instanceof RepeaterTile || source instanceof ComparatorTile)) { // Other directions (besides) of receiving.
+
 				if (!lockingTiles.contains(pos)) {
 					int data = level.getData(x, y);
 					if (((data >> 1) & 1) == 0) { // Locking tiles if unlocked.

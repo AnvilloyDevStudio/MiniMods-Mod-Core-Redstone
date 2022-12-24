@@ -41,7 +41,7 @@ public class PermanentRedstoneTransmitterTile extends Tile implements RedstoneTr
 	}
 
 	@Override
-	public int getTransmittingPower(Level level, int x, int y, Direction dir) {
+	public int getTransmittingPower(Level level, int x, int y, Direction dir, RedstoneNodeTile target) {
 		return 15;
 	}
 
