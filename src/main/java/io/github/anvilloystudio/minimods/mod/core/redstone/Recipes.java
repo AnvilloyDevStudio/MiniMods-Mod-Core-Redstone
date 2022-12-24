@@ -10,5 +10,7 @@ public class Recipes {
 		minicraft.item.Recipes.workbenchRecipes.add(new Recipe("Daylight Detector_1", "Redstone_2", "Rock_1", "Plank_1", "Glass_2", "Iron Ingot_1"));
 		minicraft.item.Recipes.workbenchRecipes.add(new Recipe("Pressure Plate_1", "Redstone_1", "Rock_4"));
 		minicraft.item.Recipes.workbenchRecipes.add(new Recipe("Redstone Torch_1", "Redstone_1", "Plank_1"));
+		minicraft.item.Recipes.workbenchRecipes.add(new Recipe("Repeater_1", "Redstone_2", "Redstone Torch_2", "Rock_4"));
+		minicraft.item.Recipes.workbenchRecipes.add(new Recipe("Comparator_1", "Redstone_3", "Redstone Torch_3", "Rock_4"));
 	}
 }

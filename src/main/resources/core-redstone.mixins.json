@@ -4,6 +4,7 @@
   "priority": 2147480099,
   "minVersion": "0.8.5",
   "mixins": [
+    "DoorTileMixin",
     "TileItemMixin",
     "UpdaterMixin"
   ],

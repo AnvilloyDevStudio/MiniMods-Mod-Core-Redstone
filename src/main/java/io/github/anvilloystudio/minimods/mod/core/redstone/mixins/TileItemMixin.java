@@ -1,6 +1,7 @@
 package io.github.anvilloystudio.minimods.mod.core.redstone.mixins;
 
 import io.github.anvilloystudio.minimods.api.GraphicComp;
+import io.github.anvilloystudio.minimods.mod.core.redstone.items.ComparatorItem;
 import io.github.anvilloystudio.minimods.mod.core.redstone.items.RepeaterItem;
 import minicraft.gfx.Sprite;
 import minicraft.item.Item;
@@ -47,8 +48,11 @@ public class TileItemMixin {
 					GraphicComp.getSpriteSheetFromInputStream(TileItemMixin.class.getResourceAsStream("/assets/textures/items/redstone_torch.png"))),
 				"Redstone Torch", "Stone Bricks")); // Redstone Torch
 			items.add(new RepeaterItem("Repeater", GraphicComp.getSpriteFromSheet(1, 1,
-					GraphicComp.getSpriteSheetFromInputStream(TileItemMixin.class.getResourceAsStream("/assets/textures/items/repeater.png"))),
+				GraphicComp.getSpriteSheetFromInputStream(TileItemMixin.class.getResourceAsStream("/assets/textures/items/repeater.png"))),
 				"Repeater", "Stone Bricks")); // Repeater
+			items.add(new ComparatorItem("Comparator", GraphicComp.getSpriteFromSheet(1, 1,
+				GraphicComp.getSpriteSheetFromInputStream(TileItemMixin.class.getResourceAsStream("/assets/textures/items/comparator.png"))),
+				"Comparator", "Stone Bricks")); // Comparator
 		} catch (IOException e) {
 			throw new RuntimeException("Unable to initialize item(s).", e);
 		}

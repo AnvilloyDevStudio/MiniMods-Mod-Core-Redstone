@@ -16,7 +16,7 @@ import java.util.EnumSet;
 @SuppressWarnings({"deprecated", "unused"})
 public interface RedstoneNodeTile {
 	/**
-	 * Getting if the tile is connectable to redstone dust at the specified direction.
+	 * Getting if the tile is connectable to redstone dust at the specified direction in rendering.
 	 * @param level The level of the tile being on.
 	 * @param x The x-coordinate of the tile.
 	 * @param y The y-coordinate of the tile.
