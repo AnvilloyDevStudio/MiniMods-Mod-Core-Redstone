@@ -9,12 +9,11 @@ import java.util.EnumSet;
 
 /**
  * This is a base class to mark that the class is a kind of redstone tile.
- * @deprecated This should not be implemented directly; unexpected problems might occur.
+ * Note: This should not be implemented directly; unexpected problems might occur.
  * All subclasses should implement the extended interfaces of this.
  */
-@Deprecated
-@SuppressWarnings({"deprecated", "unused"})
-public interface RedstoneNodeTile {
+@SuppressWarnings("unused")
+public interface RedstoneTileNode {
 	/**
 	 * Getting if the tile is connectable to redstone dust at the specified direction in rendering.
 	 * @param level The level of the tile being on.
@@ -25,7 +24,7 @@ public interface RedstoneNodeTile {
 	 */
 	boolean isConnectableToDust(Level level, int x, int y, Direction dir);
 
-	interface RedstoneTransmitter<T extends Tile & RedstoneTransmitter<T>> extends RedstoneNodeTile {
+	interface RedstoneTransmitter<T extends Tile & RedstoneTransmitter<T>> extends RedstoneTileNode {
 
 		/**
 		 * Getting all transmittable directions the tile could, depending on the tile state.
@@ -47,7 +46,7 @@ public interface RedstoneNodeTile {
 		 * @param target The target to transmit power.
 		 * @return The redstone power. The value should be in between 0 and 15. 0 if the direction is not transmittable.
 		 */
-		int getTransmittingPower(Level level, int x, int y, Direction dir, RedstoneNodeTile target);
+		int getTransmittingPower(Level level, int x, int y, Direction dir, RedstoneTileNode target);
 
 		/**
 		 * Getting the transmitting power strength to the specified direction on the specified tile.
@@ -60,7 +59,7 @@ public interface RedstoneNodeTile {
 		boolean getTransmittingStrength(Level level, int x, int y, Direction dir);
 	}
 
-	interface RedstoneReceiver<T extends Tile & RedstoneReceiver<T>> extends RedstoneNodeTile {
+	interface RedstoneReceiver<T extends Tile & RedstoneReceiver<T>> extends RedstoneTileNode {
 		/**
 		 * Getting all receivable directions the tile could, depending on the tile state.
 		 * @param level The level of the tile being on.
@@ -83,6 +82,6 @@ public interface RedstoneNodeTile {
 		 * @param source The source tile of the redstone power.
 		 * @return `true` if the there is any data changed on the level; `false` if not.
 		 */
-		boolean receivePower(Level level, int x, int y, Direction dir, int power, boolean strong, RedstoneNodeTile source);
+		boolean receivePower(Level level, int x, int y, Direction dir, int power, boolean strong, RedstoneTileNode source);
 	}
 }

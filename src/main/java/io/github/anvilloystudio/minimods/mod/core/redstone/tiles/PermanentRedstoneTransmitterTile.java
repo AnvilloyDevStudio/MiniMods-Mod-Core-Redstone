@@ -1,7 +1,7 @@
 package io.github.anvilloystudio.minimods.mod.core.redstone.tiles;
 
 import io.github.anvilloystudio.minimods.api.GraphicComp;
-import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneNodeTile.RedstoneTransmitter;
+import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneTileNode.RedstoneTransmitter;
 import minicraft.core.io.Sound;
 import minicraft.entity.Direction;
 import minicraft.entity.mob.Player;
@@ -41,7 +41,7 @@ public class PermanentRedstoneTransmitterTile extends Tile implements RedstoneTr
 	}
 
 	@Override
-	public int getTransmittingPower(Level level, int x, int y, Direction dir, RedstoneNodeTile target) {
+	public int getTransmittingPower(Level level, int x, int y, Direction dir, RedstoneTileNode target) {
 		return 15;
 	}
 

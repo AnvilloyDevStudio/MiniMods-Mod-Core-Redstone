@@ -3,7 +3,7 @@ package io.github.anvilloystudio.minimods.mod.core.redstone.tiles;
 import io.github.anvilloystudio.minimods.api.GraphicComp;
 import io.github.anvilloystudio.minimods.api.ModProcedure;
 import io.github.anvilloystudio.minimods.api.interfaces.Tickable;
-import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneNodeTile.RedstoneTransmitter;
+import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneTileNode.RedstoneTransmitter;
 import minicraft.core.World;
 import minicraft.core.io.InputHandler;
 import minicraft.core.io.Sound;
@@ -69,7 +69,7 @@ public class PressurePlateTile extends Tile implements RedstoneTransmitter<Press
 	}
 
 	@Override
-	public int getTransmittingPower(Level level, int x, int y, Direction dir, RedstoneNodeTile target) {
+	public int getTransmittingPower(Level level, int x, int y, Direction dir, RedstoneTileNode target) {
 		return level.getData(x, y) == 1 ? 15 : 0;
 	}
 

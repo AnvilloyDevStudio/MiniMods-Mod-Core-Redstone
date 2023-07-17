@@ -1,9 +1,9 @@
 package io.github.anvilloystudio.minimods.mod.core.redstone;
 
 import com.google.common.collect.Sets;
-import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneNodeTile;
-import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneNodeTile.RedstoneReceiver;
-import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneNodeTile.RedstoneTransmitter;
+import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneTileNode;
+import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneTileNode.RedstoneReceiver;
+import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneTileNode.RedstoneTransmitter;
 import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneTile;
 import minicraft.core.World;
 import minicraft.entity.Direction;
@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.stream.Collectors;
 
-@SuppressWarnings("deprecated")
 public class RedstoneNode {
 	private static final HashSet<RedstoneNode> nodeList = new HashSet<>();
 	// The key is the position is correspondingly related to the level position of the node.
@@ -32,9 +31,9 @@ public class RedstoneNode {
 					Tile tile = lvl.getTile(x, y);
 					int lvlIdx = World.lvlIdx(lvl.depth);
 					int pos = x + y * lvl.w + lvlIdx * lvl.w * lvl.h;
-					if (tile instanceof RedstoneNodeTile) {
+					if (tile instanceof RedstoneTileNode) {
 						if (!nodeMap.containsKey(pos)) {
-							RedstoneNode node = new RedstoneNode(x, y, lvlIdx, (RedstoneNodeTile) tile);
+							RedstoneNode node = new RedstoneNode(x, y, lvlIdx, (RedstoneTileNode) tile);
 							nodeList.add(node);
 							nodeMap.put(pos, node);
 						}
@@ -95,7 +94,7 @@ public class RedstoneNode {
 								else if (dir == Direction.LEFT) targetDir = Direction.RIGHT;
 								else if (dir == Direction.RIGHT) targetDir = Direction.LEFT;
 								if (((RedstoneReceiver<?>) target).getReceivableDirections(level, targetX, targetY).contains(targetDir)) {
-									int power = ((RedstoneTransmitter<?>) node.tile).getTransmittingPower(level, node.x, node.y, dir, (RedstoneNodeTile) target);
+									int power = ((RedstoneTransmitter<?>) node.tile).getTransmittingPower(level, node.x, node.y, dir, (RedstoneTileNode) target);
 									boolean strong = ((RedstoneTransmitter<?>) node.tile).getTransmittingStrength(level, node.x, node.y, dir);
 									if (((RedstoneReceiver<?>) target).receivePower(level, targetX, targetY, Direction.getDirection(-dir.getX(), -dir.getY()), power, strong, node.tile))
 										changed = true;
@@ -132,9 +131,9 @@ public class RedstoneNode {
 	public final int x;
 	public final int y;
 	public final int lvlIdx;
-	private final RedstoneNodeTile tile;
+	private final RedstoneTileNode tile;
 
-	public RedstoneNode(int x, int y, int lvlIdx, RedstoneNodeTile tile) {
+	public RedstoneNode(int x, int y, int lvlIdx, RedstoneTileNode tile) {
 		this.x = x;
 		this.y = y;
 		this.lvlIdx = lvlIdx;

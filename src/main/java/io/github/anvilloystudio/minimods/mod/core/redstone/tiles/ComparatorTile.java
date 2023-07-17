@@ -4,8 +4,8 @@ import io.github.anvilloystudio.minimods.api.GraphicComp;
 import io.github.anvilloystudio.minimods.api.ModProcedure;
 import io.github.anvilloystudio.minimods.api.Vector2;
 import io.github.anvilloystudio.minimods.api.interfaces.Tickable;
-import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneNodeTile.RedstoneReceiver;
-import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneNodeTile.RedstoneTransmitter;
+import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneTileNode.RedstoneReceiver;
+import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneTileNode.RedstoneTransmitter;
 import minicraft.core.World;
 import minicraft.core.io.InputHandler;
 import minicraft.core.io.Sound;
@@ -14,7 +14,6 @@ import minicraft.entity.mob.Mob;
 import minicraft.entity.mob.Player;
 import minicraft.gfx.Screen;
 import minicraft.gfx.Sprite;
-import minicraft.gfx.SpriteSheet;
 import minicraft.item.Item;
 import minicraft.item.Items;
 import minicraft.item.ToolItem;
@@ -24,17 +23,14 @@ import minicraft.level.tile.Tile;
 import minicraft.level.tile.Tiles;
 import org.jetbrains.annotations.NotNull;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.EnumSet;
-import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ComparatorTile extends Tile implements RedstoneTransmitter<ComparatorTile>, RedstoneReceiver<ComparatorTile> {
-	private static final Sprite[] spriteOff;
-	private static final Sprite[] spriteOn;
+	private static final Sprite spriteOff;
+	private static final Sprite spriteOn;
 	private static final Sprite spriteTorch;
 	private static final Sprite spriteTorchOff;
 	private static final Sprite spriteTorchHead;
@@ -42,20 +38,10 @@ public class ComparatorTile extends Tile implements RedstoneTransmitter<Comparat
 
 	static {
 		try {
-			BufferedImage image = ImageIO.read(Objects.requireNonNull(RepeaterTile.class.getResourceAsStream("/assets/textures/tiles/comparator.png")));
-			spriteOff = new Sprite[4];
-			spriteOff[0] = GraphicComp.getSpriteFromSheet(2, 2, new SpriteSheet(image));
-			spriteOff[1] = GraphicComp.getSpriteFromSheet(2, 2, new SpriteSheet(GraphicComp.rotate180(image)));
-			spriteOff[2] = GraphicComp.getSpriteFromSheet(2, 2, new SpriteSheet(GraphicComp.rotateClockwise90(image)));
-			spriteOff[3] = GraphicComp.getSpriteFromSheet(2, 2, new SpriteSheet(GraphicComp.rotateAnticlockwise90(image)));
-
-			image = ImageIO.read(Objects.requireNonNull(RepeaterTile.class.getResourceAsStream("/assets/textures/tiles/comparator_on.png")));
-			spriteOn = new Sprite[4];
-			spriteOn[0] = GraphicComp.getSpriteFromSheet(2, 2, new SpriteSheet(image));
-			spriteOn[1] = GraphicComp.getSpriteFromSheet(2, 2, new SpriteSheet(GraphicComp.rotate180(image)));
-			spriteOn[2] = GraphicComp.getSpriteFromSheet(2, 2, new SpriteSheet(GraphicComp.rotateClockwise90(image)));
-			spriteOn[3] = GraphicComp.getSpriteFromSheet(2, 2, new SpriteSheet(GraphicComp.rotateAnticlockwise90(image)));
-
+			spriteOff = GraphicComp.getSpriteFromSheet(2, 2,
+				GraphicComp.getSpriteSheetFromInputStream(RepeaterTile.class.getResourceAsStream("/assets/textures/tiles/comparator.png")));
+			spriteOn = GraphicComp.getSpriteFromSheet(2, 2,
+				GraphicComp.getSpriteSheetFromInputStream(RepeaterTile.class.getResourceAsStream("/assets/textures/tiles/comparator_on.png")));
 			spriteTorch = GraphicComp.getSpriteFromSheet(2, 2,
 				GraphicComp.getSpriteSheetFromInputStream(RepeaterTile.class.getResourceAsStream("/assets/textures/tiles/comparator_torch.png")));
 			spriteTorchOff = GraphicComp.getSpriteFromSheet(2, 2,
@@ -139,7 +125,7 @@ public class ComparatorTile extends Tile implements RedstoneTransmitter<Comparat
 	}
 
 	@Override
-	public int getTransmittingPower(Level level, int x, int y, Direction dir, RedstoneNodeTile target) {
+	public int getTransmittingPower(Level level, int x, int y, Direction dir, RedstoneTileNode target) {
 		addExistingTile(level, x, y);
 		int pos = x + y * level.w + World.lvlIdx(level.depth) * level.w * level.h;
 		return transmittingTiles.getOrDefault(pos, 0);
@@ -161,7 +147,7 @@ public class ComparatorTile extends Tile implements RedstoneTransmitter<Comparat
 	}
 
 	@Override
-	public boolean receivePower(Level level, int x, int y, Direction dir, int power, boolean strong, RedstoneNodeTile source) {
+	public boolean receivePower(Level level, int x, int y, Direction dir, int power, boolean strong, RedstoneTileNode source) {
 		Direction transmittingDir = Direction.getDirection((level.getData(x, y) >> 2) & 3);
 		addExistingTile(level, x, y);
 		int pos = x + y * level.w + World.lvlIdx(level.depth) * level.w * level.h;
@@ -246,7 +232,8 @@ public class ComparatorTile extends Tile implements RedstoneTransmitter<Comparat
 		int dir = (data >> 2) & 3;
 		boolean powered = (data & 1) == 1;
 		int mode = (data >> 1) & 1;
-		(powered ? spriteOn : spriteOff)[dir].render(screen, x << 4, y << 4);
+		GraphicComp.SpriteRenderer.Rotation rotation = GraphicComp.SpriteRenderer.Rotation.getFromDirectionDown(dir);
+		GraphicComp.SpriteRenderer.render(screen, x << 4, y << 4, powered ? spriteOn : spriteOff, rotation);
 		Sprite torchSprite = powered ? spriteTorch : spriteTorchOff;
 		Sprite torchHeadSprite = mode == 0 ? spriteTorchHeadOff : spriteTorchHead;
 		if (dir == 0) {

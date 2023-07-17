@@ -1,8 +1,8 @@
 package io.github.anvilloystudio.minimods.mod.core.redstone.tiles;
 
 import io.github.anvilloystudio.minimods.api.GraphicComp;
-import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneNodeTile.RedstoneReceiver;
-import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneNodeTile.RedstoneTransmitter;
+import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneTileNode.RedstoneReceiver;
+import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneTileNode.RedstoneTransmitter;
 import minicraft.core.io.Sound;
 import minicraft.entity.Direction;
 import minicraft.entity.mob.Mob;
@@ -47,7 +47,7 @@ public class RedstoneTile extends Tile implements RedstoneTransmitter<RedstoneTi
 	}
 
 	@Override
-	public int getTransmittingPower(Level level, int x, int y, Direction dir, RedstoneNodeTile target) {
+	public int getTransmittingPower(Level level, int x, int y, Direction dir, RedstoneTileNode target) {
 		return level.getData(x, y) & 0xF;
 	}
 
@@ -62,7 +62,7 @@ public class RedstoneTile extends Tile implements RedstoneTransmitter<RedstoneTi
 	}
 
 	@Override
-	public boolean receivePower(Level level, int x, int y, Direction dir, int power, boolean strong, RedstoneNodeTile source) {
+	public boolean receivePower(Level level, int x, int y, Direction dir, int power, boolean strong, RedstoneTileNode source) {
 		if (source instanceof RedstoneTile)
 			power--; // Decrementing power in dusts.
 		if (power > level.getData(x, y)) {
@@ -95,14 +95,14 @@ public class RedstoneTile extends Tile implements RedstoneTransmitter<RedstoneTi
 		boolean up, down, left, right, straight;
 		up = down = left = right = straight = false;
 		Tile tile;
-		if ((tile = level.getTile(x, y - 1)) instanceof RedstoneNodeTile &&
-			((RedstoneNodeTile) tile).isConnectableToDust(level, x, y - 1, Direction.DOWN)) up = true;
-		if ((tile = level.getTile(x, y + 1)) instanceof RedstoneNodeTile &&
-			((RedstoneNodeTile) tile).isConnectableToDust(level, x, y + 1, Direction.UP)) down = true;
-		if ((tile = level.getTile(x - 1, y)) instanceof RedstoneNodeTile &&
-			((RedstoneNodeTile) tile).isConnectableToDust(level, x - 1, y, Direction.RIGHT)) left = true;
-		if ((tile = level.getTile(x + 1, y)) instanceof RedstoneNodeTile &&
-			((RedstoneNodeTile) tile).isConnectableToDust(level, x + 1, y, Direction.LEFT)) right = true;
+		if ((tile = level.getTile(x, y - 1)) instanceof RedstoneTileNode &&
+			((RedstoneTileNode) tile).isConnectableToDust(level, x, y - 1, Direction.DOWN)) up = true;
+		if ((tile = level.getTile(x, y + 1)) instanceof RedstoneTileNode &&
+			((RedstoneTileNode) tile).isConnectableToDust(level, x, y + 1, Direction.UP)) down = true;
+		if ((tile = level.getTile(x - 1, y)) instanceof RedstoneTileNode &&
+			((RedstoneTileNode) tile).isConnectableToDust(level, x - 1, y, Direction.RIGHT)) left = true;
+		if ((tile = level.getTile(x + 1, y)) instanceof RedstoneTileNode &&
+			((RedstoneTileNode) tile).isConnectableToDust(level, x + 1, y, Direction.LEFT)) right = true;
 
 		// Rendering full directional look if not connected.
 		if (!(up || down || left || right)) up = down = left = right = true;

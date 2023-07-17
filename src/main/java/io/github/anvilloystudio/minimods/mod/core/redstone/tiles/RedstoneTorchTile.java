@@ -3,8 +3,8 @@ package io.github.anvilloystudio.minimods.mod.core.redstone.tiles;
 import io.github.anvilloystudio.minimods.api.GraphicComp;
 import io.github.anvilloystudio.minimods.api.ModProcedure;
 import io.github.anvilloystudio.minimods.api.interfaces.Tickable;
-import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneNodeTile.RedstoneReceiver;
-import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneNodeTile.RedstoneTransmitter;
+import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneTileNode.RedstoneReceiver;
+import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneTileNode.RedstoneTransmitter;
 import minicraft.core.World;
 import minicraft.core.io.InputHandler;
 import minicraft.core.io.Sound;
@@ -68,7 +68,7 @@ public class RedstoneTorchTile extends Tile implements RedstoneTransmitter<Redst
 	}
 
 	@Override
-	public int getTransmittingPower(Level level, int x, int y, Direction dir, RedstoneNodeTile target) {
+	public int getTransmittingPower(Level level, int x, int y, Direction dir, RedstoneTileNode target) {
 		return level.getData(x, y) == 0 ? 15 : 0;
 	}
 
@@ -83,7 +83,7 @@ public class RedstoneTorchTile extends Tile implements RedstoneTransmitter<Redst
 	}
 
 	@Override
-	public boolean receivePower(Level level, int x, int y, Direction dir, int power, boolean strong, RedstoneNodeTile source) {
+	public boolean receivePower(Level level, int x, int y, Direction dir, int power, boolean strong, RedstoneTileNode source) {
 		if (power > 0 && strong) {
 			int pos = x + y * level.w + World.lvlIdx(level.depth) * level.w * level.h;
 			if (!receivingTiles.contains(pos)) {

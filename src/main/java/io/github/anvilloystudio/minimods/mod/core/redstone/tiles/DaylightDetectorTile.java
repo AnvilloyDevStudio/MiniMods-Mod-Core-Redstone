@@ -1,7 +1,7 @@
 package io.github.anvilloystudio.minimods.mod.core.redstone.tiles;
 
 import io.github.anvilloystudio.minimods.api.GraphicComp;
-import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneNodeTile.RedstoneTransmitter;
+import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneTileNode.RedstoneTransmitter;
 import minicraft.core.Updater;
 import minicraft.core.io.Sound;
 import minicraft.entity.Direction;
@@ -46,7 +46,7 @@ public class DaylightDetectorTile extends Tile implements RedstoneTransmitter<Da
 	}
 
 	@Override
-	public int getTransmittingPower(Level level, int x, int y, Direction dir, RedstoneNodeTile target) {
+	public int getTransmittingPower(Level level, int x, int y, Direction dir, RedstoneTileNode target) {
 		if (target instanceof RepeaterTile)
 			return 15;
 		return level.getData(x, y) == 0 ? getSkyLevel() : 15 - getSkyLevel();

@@ -2,8 +2,8 @@ package io.github.anvilloystudio.minimods.mod.core.redstone.mixins;
 
 import io.github.anvilloystudio.minimods.api.ModProcedure;
 import io.github.anvilloystudio.minimods.api.interfaces.Tickable;
-import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneNodeTile;
-import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneNodeTile.RedstoneReceiver;
+import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneTileNode;
+import io.github.anvilloystudio.minimods.mod.core.redstone.tiles.RedstoneTileNode.RedstoneReceiver;
 import minicraft.core.World;
 import minicraft.core.io.InputHandler;
 import minicraft.entity.Direction;
@@ -62,7 +62,7 @@ public class DoorTileMixin extends Tile implements RedstoneReceiver<DoorTileMixi
 	}
 
 	@Override
-	public boolean receivePower(Level level, int x, int y, Direction dir, int power, boolean strong, RedstoneNodeTile source) {
+	public boolean receivePower(Level level, int x, int y, Direction dir, int power, boolean strong, RedstoneTileNode source) {
 		int pos = x + y * level.w + World.lvlIdx(level.depth) * level.w * level.h;
 		if (!existingTiles.contains(pos))
 			existingTiles.add(pos);
